@@ -158,7 +158,7 @@ def action2(world,id)
   STDERR.print("POS: ",me["pos"],"\n")
   
   if $goal.nil? ||
-     bombs?(world,$goal) ||
+     bomb?(world,$goal) ||
      world["walls"].include?([$goal["x"],$goal["y"]]) ||
      $goal == me["pos"] ||
      (path_list = path_to_goal2(world,me["pos"],$goal)).empty?
