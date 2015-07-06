@@ -1,6 +1,6 @@
 # coding: utf-8
 require 'json'
-require './path_finding.rb'
+require File.dirname(__FILE__) + '/path_finding.rb'
 
 STDIN .set_encoding("UTF-8", "UTF-8")
 STDOUT.set_encoding("UTF-8", "UTF-8")
