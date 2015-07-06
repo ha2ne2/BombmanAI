@@ -31,7 +31,7 @@ def astar(open_list,close_list,goal_p,successor,cost_fn)
       path
     else
       close_list.push(path)
-      if path.g < 30
+      if path.g < 15
         successor.(path.value).each{ |val|
         path2 = Path.new(value: val, g: path.g+1, h: cost_fn.(val),
                          prev: path)
