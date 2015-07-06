@@ -1,10 +1,21 @@
 # coding: utf-8
 require 'json'
-require './path_finding.rb'
+require File.dirname(__FILE__) + '/path_finding.rb'
 
 STDIN .set_encoding("UTF-8", "UTF-8")
 STDOUT.set_encoding("UTF-8", "UTF-8")
 STDERR.set_encoding("UTF-8", "UTF-8")
+
+class Hoge
+  def write(*x)
+  end
+  def print(*x)
+  end
+  def puts(*x)
+  end
+end
+
+$stderr = Hoge.new()
 
 def game_loop()
   $bomb_set_timer = 0
@@ -24,9 +35,6 @@ $goal = nil
 
 FALLING_WALL = [[1, 1], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1], [10, 1], [11, 1], [12, 1], [13, 1], [13, 2], [13, 3], [13, 4], [13, 5], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11], [13, 12], [13, 13], [12, 13], [11, 13], [10, 13], [9, 13], [8, 13], [7, 13], [6, 13], [5, 13], [4, 13], [3, 13], [2, 13], [1, 13], [1, 12], [1, 11], [1, 10], [1, 9], [1, 8], [1, 7], [1, 6], [1, 5], [1, 4], [1, 3], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2], [9, 2], [10, 2], [11, 2], [12, 2], [12, 3], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [11, 12], [10, 12], [9, 12], [8, 12], [7, 12], [6, 12], [5, 12], [4, 12], [3, 12], [2, 12], [2, 11], [2, 10], [2, 9], [2, 8], [2, 7], [2, 6], [2, 5], [2, 4], [2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3], [9, 3], [10, 3], [11, 3], [11, 4], [11, 5], [11, 6], [11, 7], [11, 8], [11, 9], [11, 10], [11, 11], [10, 11], [9, 11], [8, 11], [7, 11], [6, 11], [5, 11], [4, 11], [3, 11], [3, 10], [3, 9], [3, 8], [3, 7], [3, 6], [3, 5], [3, 4], [4, 4], [5, 4], [6, 4], [7, 4], [8, 4], [9, 4], [10, 4], [10, 5], [10, 6], [10, 7], [10, 8], [10, 9], [10, 10], [9, 10], [8, 10], [7, 10], [6, 10], [5, 10], [4, 10], [4, 9], [4, 8], [4, 7], [4, 6], [4, 5]]
 FALLING_START = 360
-
-data = '{"turn":881,"walls":[[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[0,12],[0,13],[0,14],[1,0],[1,14],[2,0],[2,2],[2,4],[2,6],[2,8],[2,10],[2,12],[2,14],[3,0],[3,14],[4,0],[4,2],[4,4],[4,6],[4,8],[4,10],[4,12],[4,14],[5,0],[5,14],[6,0],[6,2],[6,4],[6,6],[6,8],[6,10],[6,12],[6,14],[7,0],[7,14],[8,0],[8,2],[8,4],[8,6],[8,8],[8,10],[8,12],[8,14],[9,0],[9,14],[10,0],[10,2],[10,4],[10,6],[10,8],[10,10],[10,12],[10,14],[11,0],[11,14],[12,0],[12,2],[12,4],[12,6],[12,8],[12,10],[12,12],[12,14],[13,0],[13,14],[14,0],[14,1],[14,2],[14,3],[14,4],[14,5],[14,6],[14,7],[14,8],[14,9],[14,10],[14,11],[14,12],[14,13],[14,14],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[7,1],[8,1],[9,1],[10,1],[11,1],[12,1],[13,1],[13,2],[13,3],[13,4],[13,5],[13,6],[13,7],[13,8],[13,9],[13,10],[13,11],[13,12],[13,13],[12,13],[11,13],[10,13],[9,13],[8,13],[7,13],[6,13],[5,13],[4,13],[3,13],[2,13],[1,13],[1,12],[1,11],[1,10],[1,9],[1,8],[1,7],[1,6],[1,5],[1,4],[1,3],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],[7,2],[8,2],[9,2],[10,2],[11,2],[12,2],[12,3],[12,4],[12,5],[12,6],[12,7],[12,8],[12,9],[12,10],[12,11],[12,12],[11,12],[10,12],[9,12],[8,12],[7,12],[6,12],[5,12],[4,12],[3,12],[2,12],[2,11],[2,10],[2,9],[2,8],[2,7],[2,6],[2,5],[2,4],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[8,3],[9,3],[10,3],[11,3],[11,4],[11,5],[11,6],[11,7],[11,8],[11,9],[11,10],[11,11],[10,11],[9,11],[8,11],[7,11],[6,11],[5,11],[4,11],[3,11],[3,10],[3,9],[3,8],[3,7],[3,6],[3,5],[3,4],[4,4],[5,4],[6,4],[7,4],[8,4],[9,4],[10,4],[10,5],[10,6],[10,7],[10,8],[10,9],[10,10],[9,10],[8,10],[7,10],[6,10],[5,10],[4,10],[4,9],[4,8],[4,7],[4,6],[4,5]],"blocks":[[3,12],[4,7],[5,8],[1,6],[10,11],[2,7],[11,1],[13,5],[5,4],[2,11],[11,2],[1,8],[3,10],[5,2],[1,7],[3,8],[5,10],[7,12],[1,9],[10,1],[9,2],[1,5],[1,3],[4,1],[1,4],[3,6],[3,3],[5,6],[5,1],[6,3],[8,1],[12,7],[13,3],[13,4],[10,7],[11,3],[3,9],[12,11],[5,11],[4,11],[6,11],[8,11],[5,3],[6,1],[10,3],[3,2],[7,11],[4,5],[7,3],[5,12],[9,1],[3,4],[2,3]]}'
-data = JSON.parse(data)
 
 def deep_copy(obj)
   Marshal.load(Marshal.dump(obj))
@@ -116,8 +124,18 @@ def successor1((pos,world))
 end      
 
 
-def iterate(f,x)
-  [x, ->{iterate(f, f.(x))}]
+(def make_pipe(head,tail) [head,tail] end)
+(def head(pipe) pipe[0] end)
+(def tail(pipe) pipe[1].kind_of?(Proc) ? pipe[1] = pipe[1].call : pipe[1] end)
+(def butlast(ary) (ary.first ary.size-1) end)
+(def my_succ(n) n+1 end)
+(def pipe_to_array(pipe) (butlast pipe.flatten) end)
+(def iterate(f,x) [x, ->{iterate f, (f.call x)}] end)
+
+def take(count, pipe, result: pipe)
+  ((pipe == nil) or (count == 1)) ?
+    pipe_to_array(result) :
+    take(count-1, (tail pipe), result: result)
 end
 
 def compose(f,g)
@@ -125,24 +143,55 @@ def compose(f,g)
 end
 
 def compose_n(n,f)
-  ([f]*n).reduce(&method(:compose))
+  if n == 0
+    ->(x){x}
+  else
+    ([f]*n).reduce(&method(:compose))
+  end
 end
 
-def new_goal(world,id)
-  STDERR.puts("find new_goal")
-  me = find_me(world,id)
-  reachables = reachable_place(world,me["pos"],-1)
-  goals = (reachables - [me["pos"]]).shuffle
-  goals.each{|goal|
-    STDERR.print("goal: ", goal, "\n")
-    dist = manhattan_distance(me["pos"],goal)
+# 詰んでるかどうか。
+def must_die_p(world,pos)
+  worlds = take(11,iterate(method(:update),world))
+  reachables = [pos]
+  worlds.each{|world|
+    $stderr.print(reachables.map{|pos|[pos["x"],pos["y"]]}," ",world["fires"],"\n")
+    if (reachables.map{|pos|[pos["x"],pos["y"]]} - world["fires"]).empty?
+      return true
+    end
+    reachables = reachables.flat_map{|pos|
+      movable_neighbours(world,pos)
+    }.uniq
+  }
+    
+  return false
+end
+
+# 場所（そこへの移動途中で死なずに到達できる）を返す関数
+def new_goal(world,player)
+  $stderr.puts("find new_goal")
+  reachables = reachable_places(world,player["pos"],10)
+  cands = reachables.shuffle
+  cands.each{|cand|
+    $stderr.print("cand: ", cand, "\n")
+
+    # 目的地がそこへ最短経路で行っても壁になる場所ならスキップ
+    dist = manhattan_distance(player["pos"],cand)
     n_turn_later = compose_n(dist,method(:update))
-    if(wall?(n_turn_later.(world),goal))
+    if(wall?(n_turn_later.(world),cand))
       next
     end
-    path_list = path_to_goal2(world,me["pos"],goal)
+    
+    path_list = path_to_goal2(world,player["pos"],cand)
     if path_list.empty?.!
-      return goal
+      #path_list.lengthが1になる。
+      needed_turn = path_list.length == 1 ? 1 : path_list.length-1
+      if (must_die_p(compose_n(needed_turn,method(:update)).(world),
+                     cand))
+        next
+      else
+        return cand
+      end
     end
   }
   nil
@@ -150,31 +199,56 @@ end
 
 $goal = nil
 
+def new_bomb(player)
+  {"pos"=>{"x"=>player["pos"]["x"],
+           "y"=>player["pos"]["y"]},
+   "timer"=>10,
+   "power"=>player["power"]}
+end
+
+def set_bomb(world,player)
+  new_world = deep_copy(world)
+  new_world["bombs"] += [new_bomb(player)]
+  new_world
+end
+
 def action2(world,id)
   me = find_me(world,id)
   path_list = nil
   
-  STDERR.print("GOAL: ",$goal,"\n")
-  STDERR.print("POS: ",me["pos"],"\n")
+  $stderr.print("GOAL: ",$goal,"\n")
+  $stderr.print("POS: ",me["pos"],"\n")
+  set_bomb_flag = false
   
-  if $goal.nil? ||
-     bomb?(world,$goal) ||
-     world["walls"].include?([$goal["x"],$goal["y"]]) ||
-     $goal == me["pos"] ||
-     (path_list = path_to_goal2(world,me["pos"],$goal)).empty?
-  then
-    $goal = new_goal(world,id)
-    path_list = path_to_goal2(world,me["pos"],$goal)
-    STDERR.puts("CHANGE GOAL")
-    STDERR.print("NEW GOAL: ",$goal,"\n")
+  if rand(3) == 0
+    world_set_bomb = set_bomb(world,me)
+    goal = new_goal(world_set_bomb,me)
+    if goal
+      $goal = goal
+      set_bomb_flag = true
+    end
   end
 
-  if $goal
-    STDERR.print("PATH: ",path_list.map{|x| x[0]},"\n")
-    next_pos = (path_list[1] && path_list[1][0]) || me["pos"]
-    action = to_command(me["pos"],next_pos) + ",FALSE"
-    action
+  if $goal.nil? ||
+     bomb?(world,$goal) ||
+     wall?(world,$goal) || # このケースはいらない感じがするが
+     $goal == me["pos"] ||
+    (path_list = path_to_goal2(world,me["pos"],$goal)).empty?
+  then
+
+    if set_bomb_flag.!
+      $goal = new_goal(world,me)
+      if $goal.nil?
+        return "STAY,FALSE"
+      end
+    end
   end
+  
+  path_list = path_to_goal2(world,me["pos"],$goal)
+  $stderr.print("PATH: ",path_list.map{|x| x[0]},"\n")
+  next_pos = (path_list[1] && path_list[1][0]) || me["pos"]
+  action = to_command(me["pos"],next_pos) + "," + set_bomb_flag.to_s
+  action
 end  
 
 def pos(x,y)
@@ -206,6 +280,7 @@ def movable_neighbours(data,pos)
   [pos]+neighbours(pos).select{|p| movable?(data,p)}
 end
 
+# 目的地へ死なずに到達する経路を返す。
 def path_to_goal2(world,start,goal)
   goal_p = ->((pos,world)){ goal == pos }
   successor = method(:successor1)
@@ -224,7 +299,7 @@ def path_to_goal(data,start,goal)
   path_to_list(path)
 end
 
-def reachable_place(data,pos,n)
+def reachable_places(data,pos,n)
   visited = []
   visitedp = ->(p){ visited.find{|p2| p["x"] == p2["x"] && p["y"] == p2["y"]}}
   rec = ->(pos,n){
@@ -238,13 +313,6 @@ def reachable_place(data,pos,n)
   rec.(pos,n)
   visited
 end
-
-tmp_world = JSON.parse('{"turn":143,
- "walls":[[0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],[0,10],[0,11],[0,12],[0,13],[0,14],[1,0],[1,14],[2,0],[2,2],[2,4],[2,6],[2,8],[2,10],[2,12],[2,14],[3,0],[3,14],[4,0],[4,2],[4,4],[4,6],[4,8],[4,10],[4,12],[4,14],[5,0],[5,14],[6,0],[6,2],[6,4],[6,6],[6,8],[6,10],[6,12],[6,14],[7,0],[7,14],[8,0],[8,2],[8,4],[8,6],[8,8],[8,10],[8,12],[8,14],[9,0],[9,14],[10,0],[10,2],[10,4],[10,6],[10,8],[10,10],[10,12],[10,14],[11,0],[11,14],[12,0],[12,2],[12,4],[12,6],[12,8],[12,10],[12,12],[12,14],[13,0],[13,14],[14,0],[14,1],[14,2],[14,3],[14,4],[14,5],[14,6],[14,7],[14,8],[14,9],[14,10],[14,11],[14,12],[14,13],[14,14]],
-
- "blocks":[[11,12],[2,3],[13,4],[7,6],[4,1],[8,3],[3,4],[13,10],[6,7],[11,3],[11,9],[1,4],[1,3],[5,4],[4,3],[6,3],[6,1],[13,11],[3,2],[10,7],[10,9],[10,1],[13,9],[3,5],[12,5],[3,1],[2,5],[12,9],[5,3],[5,7],[9,7],[8,13],[9,6],[13,7],[4,7],[3,6],[11,4],[7,7],[5,6],[6,5],[3,3],[11,10],[5,2],[6,13],[12,11],[8,5],[7,5],[7,2],[11,8],[9,5],[13,8],[1,6],[11,13],[11,5],[7,8],[11,7],[8,7],[12,3],[10,5],[7,13],[7,4],[4,5],[13,3],[2,7],[11,1]],
- "bombs":[{"pos":{"x":7,"y":12},"timer":3,"power":2}],
- "fires":[[9,11],[9,10],[9,12],[8,11],[7,11],[10,11],[11,11]]}')
 
 def explode(data,bom)
   rec = -> (dir,p) {
