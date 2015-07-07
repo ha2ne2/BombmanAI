@@ -166,12 +166,21 @@ def must_die_p(world,pos)
     
   return false
 end
-
+  
 # 場所（そこへの移動途中で死なずに到達できる）を返す関数
 def new_goal(world,player)
   $stderr.puts("find new_goal")
   reachables = reachable_places(world,player["pos"],10)
+
+  item_poss = world["items"].select{|item|
+    reachables.include? item["pos"]
+  }.map{|item|
+    item["pos"]
+  }
+
   cands = reachables.shuffle
+  cands = item_poss + (cands - item_poss)
+  
   cands.each{|cand|
     $stderr.print("cand: ", cand, "\n")
 
@@ -219,8 +228,8 @@ def action2(world,id)
   $stderr.print("GOAL: ",$goal,"\n")
   $stderr.print("POS: ",me["pos"],"\n")
   set_bomb_flag = false
-  
-  if rand(3) == 0
+
+  if rand(4) == 0
     world_set_bomb = set_bomb(world,me)
     goal = new_goal(world_set_bomb,me)
     if goal
@@ -299,7 +308,7 @@ def path_to_goal(data,start,goal)
   path_to_list(path)
 end
 
-def reachable_places(data,pos,n)
+def reachable_places(data,pos,n) # -> [pos]
   visited = []
   visitedp = ->(p){ visited.find{|p2| p["x"] == p2["x"] && p["y"] == p2["y"]}}
   rec = ->(pos,n){
